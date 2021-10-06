@@ -5,7 +5,7 @@ import time
 import spamwatch
 
 import telegram.ext as tg
-from pyrogram import Client, errors
+from pyrogram import Client, errors, filters
 from telethon import TelegramClient
 
 StartTime = time.time()
@@ -91,7 +91,8 @@ if ENV:
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", None)
     SPAMWATCH_SUPPORT_CHAT = os.environ.get("SPAMWATCH_SUPPORT_CHAT", None)
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None)
-
+    BROADCAST_DB_URL = os.environ.get("BROADCAST_DB_URL",None)
+    BROADCAST_ADMINS = os.environ.get("BROADCAST_ADMINS",None).split(' ')
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True)
 
     try:
@@ -174,8 +175,6 @@ else:
 
 DRAGONS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
-DEV_USERS.add(1200780834)
-DEV_USERS.add(797768146)
 
 if not SPAMWATCH_API:
     sw = None
@@ -198,6 +197,22 @@ DEV_USERS = list(DEV_USERS)
 WOLVES = list(WOLVES)
 DEMONS = list(DEMONS)
 TIGERS = list(TIGERS)
+
+def broadcastfilters(_,__,update):
+    if not BROADCAST_ADMINS:
+        return False
+    if not BROADCAST_DB_URL:
+        return False
+    try:
+        user_id = update.from_user.id
+    except:
+        return False
+    if str(user_id) in BROADCAST_ADMINS:
+        return True
+    else:
+        return False
+
+filters.badmins = filters.create(broadcastfilters)
 
 # Load at end to ensure all prev variables have been set
 from LaylaRobot.modules.helper_funcs.handlers import (

@@ -202,6 +202,16 @@
          "description": "Required for wallpaper. Get your's from https://wall.alphacoders.com/",
          "required": false,
          "value": ""
+      },
+      "BROADCAST_DB_URL": {
+         "description": "Postgres url to store broadcast ids",
+         "required": false,
+         "value": ""
+      },
+      "BROADCAST_ADMINS": {
+         "description": "User id of person who can send broadcast",
+         "required": false,
+         "value": ""
       }
       
    }
